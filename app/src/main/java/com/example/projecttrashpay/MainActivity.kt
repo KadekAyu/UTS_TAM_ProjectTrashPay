@@ -23,10 +23,13 @@ import androidx.navigation.navArgument
 import com.example.projecttrashpay.model.riwayatList
 import com.example.projecttrashpay.screen.*
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
+class MainActivity : ComponentActivity() 
+{
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
-        setContent {
+        setContent
+        {
             TrashPayApp()
         }
     }
