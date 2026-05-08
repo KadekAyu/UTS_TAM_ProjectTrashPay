@@ -24,7 +24,8 @@ fun Login(nav: NavHostController) {
     Column(
         modifier = Modifier.fillMaxSize().background(Color(0xFFF4F4F4)).padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
-    ) {
+    )
+    {
         Image(painter = painterResource(R.drawable.recycle), contentDescription = "", modifier = Modifier.size(100.dp))
         Spacer(Modifier.height(16.dp))
         Text("TrashPay", style = MaterialTheme.typography.headlineMedium, color = Color(0xFF1B5E20), fontWeight = FontWeight.Bold)

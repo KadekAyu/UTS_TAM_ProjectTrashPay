@@ -22,7 +22,8 @@ fun Dashboard(nav: NavHostController) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
             Image(painter = painterResource(R.drawable.profileicon), contentDescription = null, modifier = Modifier.size(50.dp))
             Spacer(modifier = Modifier.width(12.dp))
-            Column(modifier = Modifier.weight(1f)) {
+            Column(modifier = Modifier.weight(1f))
+            {
                 Text("Halo, User!", fontWeight = FontWeight.Bold)
                 Text("Selamat datang kembali", color = Color.Gray)
             }
