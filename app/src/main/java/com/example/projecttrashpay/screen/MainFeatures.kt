@@ -17,9 +17,12 @@ import androidx.navigation.NavHostController
 import com.example.projecttrashpay.R
 
 @Composable
-fun Dashboard(nav: NavHostController) {
-    Column(modifier = Modifier.fillMaxSize().background(Color(0xFFF5F5F5)).padding(16.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+fun Dashboard(nav: NavHostController)
+{
+    Column(modifier = Modifier.fillMaxSize().background(Color(0xFFF5F5F5)).padding(16.dp)) 
+    {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) 
+        {
             Image(painter = painterResource(R.drawable.profileicon), contentDescription = null, modifier = Modifier.size(50.dp))
             Spacer(modifier = Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
