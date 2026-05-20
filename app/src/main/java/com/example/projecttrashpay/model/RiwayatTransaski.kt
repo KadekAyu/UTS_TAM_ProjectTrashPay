@@ -14,7 +14,34 @@ data class Riwayat(
 )
 
 val riwayatList = listOf(
-    Riwayat(1, "Botol", "2.5 kg", "250 Poin", R.drawable.botol, "Setor Langsung", "B.S. Pahoman", "10 Januari 2026"),
-    Riwayat(2, "Kertas", "1.5 kg", "120 Poin", R.drawable.kertas, "Penjemputan", "Rumah - Jl. Mawar No. 5", "12 Januari 2026"),
-    Riwayat(3, "Plastik", "5.5 kg", "550 Poin", R.drawable.plastic, "Setor Langsung", "B.S. Kedaton", "15 Januari 2026")
+    Riwayat(
+        1,
+        "Botol",
+        "2.5 kg",
+        "250 Poin",
+        R.drawable.ic_bottle,
+        "Setor Langsung",
+        "B.S. Pahoman",
+        "10 Januari 2026"
+    ),
+    Riwayat(
+        2,
+        "Kertas",
+        "1.5 kg",
+        "120 Poin",
+        R.drawable.ic_paper,
+        "Penjemputan",
+        "Rumah - Jl. Mawar No. 5",
+        "12 Januari 2026"
+    ),
+    Riwayat(
+        3,
+        "Plastik",
+        "5.5 kg",
+        "550 Poin",
+        R.drawable.ic_plastic,
+        "Setor Langsung",
+        "B.S. Kedaton",
+        "15 Januari 2026"
+    )
 )

@@ -67,13 +67,24 @@ fun MainScreen() {
 
             composable(
                 route = "detail_transaksi/{id}",
-                arguments = listOf(navArgument("id") { type = NavType.IntType })
+                arguments = listOf(
+                    navArgument("id") {
+                        type = NavType.IntType
+                    }
+                )
             ) { backStackEntry ->
-                val riwayatId = backStackEntry.arguments?.getInt("id")
-                val data = riwayatList.find { it.id == riwayatId }
+                val riwayatId =
+                    backStackEntry.arguments?.getInt("id")
+
+                val data = riwayatList.find {
+                    it.id == riwayatId
+                }
 
                 if (data != null) {
-                    DetailTransaksi(nav = nav, data = data)
+                    DetailTransaksi(
+                        nav = nav,
+                        data = data
+                    )
                 }
             }
         }
@@ -83,7 +94,8 @@ fun MainScreen() {
 @Composable
 fun BottomBar(nav: NavHostController) {
     val navBackStackEntry by nav.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+    val currentRoute =
+        navBackStackEntry?.destination?.route
 
     Box {
         Row(
@@ -100,7 +112,9 @@ fun BottomBar(nav: NavHostController) {
                 selected = currentRoute == "dashboard"
             ) {
                 nav.navigate("dashboard") {
-                    popUpTo("dashboard") { inclusive = true }
+                    popUpTo("dashboard") {
+                        inclusive = true
+                    }
                     launchSingleTop = true
                 }
             }
@@ -143,16 +157,24 @@ fun BottomBar(nav: NavHostController) {
                 .align(Alignment.TopCenter)
                 .offset(y = (-25).dp)
                 .size(60.dp)
-                .background(Color.White, RoundedCornerShape(50)),
+                .background(
+                    Color.White,
+                    RoundedCornerShape(50)
+                ),
             contentAlignment = Alignment.Center
         ) {
             IconButton(
                 onClick = {
-                    nav.navigate("input") { launchSingleTop = true }
+                    nav.navigate("input") {
+                        launchSingleTop = true
+                    }
                 },
                 modifier = Modifier
                     .size(50.dp)
-                    .background(Color(0xFF0B7D2B), RoundedCornerShape(50))
+                    .background(
+                        Color(0xFF0B7D2B),
+                        RoundedCornerShape(50)
+                    )
             ) {
                 Icon(
                     Icons.Default.Add,
@@ -173,14 +195,18 @@ fun BottomItem(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable { onClick() }
+        modifier = Modifier.clickable {
+            onClick()
+        }
     ) {
         Box(
             modifier = Modifier
                 .size(36.dp)
                 .background(
-                    if (selected) Color(0xFF0B7D2B)
-                    else Color.Transparent,
+                    if (selected)
+                        Color(0xFF0B7D2B)
+                    else
+                        Color.Transparent,
                     RoundedCornerShape(50)
                 ),
             contentAlignment = Alignment.Center
@@ -188,7 +214,10 @@ fun BottomItem(
             Icon(
                 icon,
                 contentDescription = null,
-                tint = if (selected) Color.White else Color.Gray
+                tint = if (selected)
+                    Color.White
+                else
+                    Color.Gray
             )
         }
 
@@ -196,7 +225,10 @@ fun BottomItem(
 
         Text(
             text = title,
-            color = if (selected) Color(0xFF0B7D2B) else Color.Gray,
+            color = if (selected)
+                Color(0xFF0B7D2B)
+            else
+                Color.Gray,
             style = MaterialTheme.typography.labelSmall
         )
     }
