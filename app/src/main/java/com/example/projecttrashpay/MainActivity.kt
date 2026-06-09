@@ -22,6 +22,9 @@ import androidx.navigation.compose.*
 import androidx.navigation.navArgument
 import com.example.projecttrashpay.model.riwayatList
 import com.example.projecttrashpay.screen.*
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,8 +65,11 @@ fun MainScreen() {
             composable("input") { Input(nav) }
             composable("riwayat") { Riwayat(nav) }
             composable("profil") { Profil(nav) }
+            composable("panduan") { Panduan(nav) }
             composable("penjemputan") { Penjemputan(nav) }
             composable("tukar_poin") { TukarPoin(nav) }
+            composable("notifikasi") { Notifikasi(nav) }
+
 
             composable(
                 route = "detail_transaksi/{id}",
@@ -231,5 +237,57 @@ fun BottomItem(
                 Color.Gray,
             style = MaterialTheme.typography.labelSmall
         )
+    }
+}
+
+@Composable
+fun Panduan(nav: NavHostController) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF4F4F4))
+            .padding(20.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onClick = { nav.popBackStack() }) {
+                Icon(Icons.Default.ArrowBack, contentDescription = null)
+            }
+
+            Text(
+                text = "Panduan",
+                modifier = Modifier
+                    .weight(1f)
+                    .offset(x = (-20).dp),
+                textAlign = TextAlign.Center,
+                color = Color(0xFF1B5E20),
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Card(
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            shape = RoundedCornerShape(16.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = "Cara Menggunakan TrashPay",
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF1B5E20),
+                    fontSize = 18.sp
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Text("1. Pilih menu Setor Sampah.")
+                Text("2. Pilih jenis sampah dan masukkan berat.")
+                Text("3. Pilih metode setor langsung atau penjemputan.")
+                Text("4. Poin akan masuk ke akun setelah transaksi berhasil.")
+                Text("5. Poin dapat ditukar dengan hadiah pada menu Tukar Poin.")
+            }
+        }
     }
 }

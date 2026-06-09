@@ -1,5 +1,6 @@
 package com.example.projecttrashpay.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -17,11 +19,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
 import androidx.navigation.NavHostController
 import com.example.projecttrashpay.R
+import com.example.projecttrashpay.api.AuthRepository
+import kotlinx.coroutines.launch
 
 @Composable
 fun Login(nav: NavHostController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val repository = remember { AuthRepository() }
 
     Column(
         modifier = Modifier
@@ -78,24 +87,90 @@ fun Login(nav: NavHostController) {
         Text(
             "Lupa Password?",
             color = Color(0xFF2E7D32),
-            modifier = Modifier.align(Alignment.Start)
+            modifier = Modifier
+                .align(Alignment.Start)
+                .clickable {
+                    if (email.isBlank()) {
+                        Toast
+                            .makeText(context, "Masukkan email terlebih dahulu", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        scope.launch {
+                            isLoading = true
+
+                            val result = repository.resetPassword(email.trim())
+
+                            isLoading = false
+
+                            if (result.isSuccess) {
+                                Toast
+                                    .makeText(context, "Link reset password dikirim ke email", Toast.LENGTH_LONG)
+                                    .show()
+                            } else {
+                                Toast
+                                    .makeText(
+                                        context,
+                                        result.exceptionOrNull()?.message ?: "Gagal mengirim reset password",
+                                        Toast.LENGTH_LONG
+                                    )
+                                    .show()
+                            }
+                        }
+                    }
+                }
         )
 
         Spacer(Modifier.height(16.dp))
 
         Button(
             onClick = {
-                nav.navigate("main") {
-                    popUpTo("login") { inclusive = true }
+                if (email.isBlank() || password.isBlank()) {
+                    Toast
+                        .makeText(context, "Email dan password wajib diisi", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    scope.launch {
+                        isLoading = true
+
+                        val result = repository.login(
+                            email = email.trim(),
+                            password = password
+                        )
+
+                        isLoading = false
+
+                        if (result.isSuccess) {
+                            Toast
+                                .makeText(context, "Login berhasil", Toast.LENGTH_SHORT)
+                                .show()
+
+                            nav.navigate("main") {
+                                popUpTo("login") { inclusive = true }
+                            }
+                        } else {
+                            Toast
+                                .makeText(
+                                    context,
+                                    result.exceptionOrNull()?.message ?: "Login gagal",
+                                    Toast.LENGTH_LONG
+                                )
+                                .show()
+                        }
+                    }
                 }
             },
+            enabled = !isLoading,
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF0B7D2B)
             ),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Masuk", color = Color.White)
+            if (isLoading) {
+                Text("Memproses...", color = Color.White)
+            } else {
+                Text("Masuk", color = Color.White)
+            }
         }
 
         Spacer(Modifier.height(16.dp))
@@ -121,6 +196,11 @@ fun Register(nav: NavHostController) {
     var telepon by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var konfirmasi by remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val repository = remember { AuthRepository() }
 
     Column(
         modifier = Modifier
@@ -154,8 +234,8 @@ fun Register(nav: NavHostController) {
         Spacer(Modifier.height(24.dp))
 
         OutlinedTextField(
-            nama,
-            { nama = it },
+            value = nama,
+            onValueChange = { nama = it },
             placeholder = { Text("Masukkan Nama Lengkap") },
             modifier = Modifier.fillMaxWidth()
         )
@@ -163,8 +243,8 @@ fun Register(nav: NavHostController) {
         Spacer(Modifier.height(12.dp))
 
         OutlinedTextField(
-            email,
-            { email = it },
+            value = email,
+            onValueChange = { email = it },
             placeholder = { Text("Masukkan Email") },
             modifier = Modifier.fillMaxWidth()
         )
@@ -172,8 +252,8 @@ fun Register(nav: NavHostController) {
         Spacer(Modifier.height(12.dp))
 
         OutlinedTextField(
-            telepon,
-            { telepon = it },
+            value = telepon,
+            onValueChange = { telepon = it },
             placeholder = { Text("Masukkan Nomor Telepon") },
             modifier = Modifier.fillMaxWidth()
         )
@@ -181,8 +261,8 @@ fun Register(nav: NavHostController) {
         Spacer(Modifier.height(12.dp))
 
         OutlinedTextField(
-            password,
-            { password = it },
+            value = password,
+            onValueChange = { password = it },
             placeholder = { Text("Masukkan Password") },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth()
@@ -191,8 +271,8 @@ fun Register(nav: NavHostController) {
         Spacer(Modifier.height(12.dp))
 
         OutlinedTextField(
-            konfirmasi,
-            { konfirmasi = it },
+            value = konfirmasi,
+            onValueChange = { konfirmasi = it },
             placeholder = { Text("Konfirmasi Password") },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth()
@@ -201,7 +281,61 @@ fun Register(nav: NavHostController) {
         Spacer(Modifier.height(20.dp))
 
         Button(
-            onClick = { nav.navigate("login") },
+            onClick = {
+                when {
+                    nama.isBlank() || email.isBlank() || telepon.isBlank() || password.isBlank() || konfirmasi.isBlank() -> {
+                        Toast
+                            .makeText(context, "Semua data wajib diisi", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+
+                    password.length < 6 -> {
+                        Toast
+                            .makeText(context, "Password minimal 6 karakter", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+
+                    password != konfirmasi -> {
+                        Toast
+                            .makeText(context, "Konfirmasi password tidak sama", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+
+                    else -> {
+                        scope.launch {
+                            isLoading = true
+
+                            val result = repository.register(
+                                nama = nama.trim(),
+                                email = email.trim(),
+                                telepon = telepon.trim(),
+                                password = password
+                            )
+
+                            isLoading = false
+
+                            if (result.isSuccess) {
+                                Toast
+                                    .makeText(context, "Register berhasil, silakan login", Toast.LENGTH_LONG)
+                                    .show()
+
+                                nav.navigate("login") {
+                                    popUpTo("register") { inclusive = true }
+                                }
+                            } else {
+                                Toast
+                                    .makeText(
+                                        context,
+                                        result.exceptionOrNull()?.message ?: "Register gagal",
+                                        Toast.LENGTH_LONG
+                                    )
+                                    .show()
+                            }
+                        }
+                    }
+                }
+            },
+            enabled = !isLoading,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
@@ -210,7 +344,11 @@ fun Register(nav: NavHostController) {
                 containerColor = Color(0xFF0B7D2B)
             )
         ) {
-            Text("Daftar", color = Color.White)
+            if (isLoading) {
+                Text("Memproses...", color = Color.White)
+            } else {
+                Text("Daftar", color = Color.White)
+            }
         }
 
         Spacer(Modifier.height(16.dp))

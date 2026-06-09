@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "422434729584",
+    "project_id": "projecttrashpay-uap",
+    "storage_bucket": "projecttrashpay-uap.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422434729584:android:aa9440979e600e00e00eb5",
+        "android_client_info": {
+          "package_name": "com.example.projecttrashpay"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdwSKVMCrpDovVZE7g-sOQuFzAxAjuE8U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
